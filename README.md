@@ -20,6 +20,14 @@ A frontend assessment project based on the provided finance dashboard design gui
 - loading, empty, no-results, and toast feedback states
 - dark mode and responsive layout support
 
+## Screenshots
+
+<p align="center">
+  <img src="./docs/screenshots/dashboard-overview.png" alt="Dashboard overview" width="32%" />
+  <img src="./docs/screenshots/dashboard-analytics.png" alt="Dashboard analytics" width="32%" />
+  <img src="./docs/screenshots/dashboard-transactions.png" alt="Dashboard transactions" width="32%" />
+</p>
+
 ## Why This Stack
 
 I chose a Turbo workspace even though the submission currently has one app because it keeps the repo scalable and organized if shared utilities, tests, or another frontend surface need to be added later.
