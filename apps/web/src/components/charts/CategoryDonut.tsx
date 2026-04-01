@@ -1,6 +1,6 @@
 import type { CurrencyCode } from '../../types'
 import { categoryPalette } from '../../constants/dashboard'
-import { formatCompactCurrency, formatCurrency } from '../../utils/finance'
+import { convertFromUsd, formatCompactCurrency, formatCurrency } from '../../utils/finance'
 
 export function CategoryDonut({
   items,
@@ -36,7 +36,7 @@ export function CategoryDonut({
           )
         })}
         <text x="60" y="56" textAnchor="middle" className="donut-chart__amount">
-          {formatCompactCurrency(total, currency)}
+          {formatCompactCurrency(convertFromUsd(total, currency), currency)}
         </text>
         <text x="60" y="72" textAnchor="middle" className="donut-chart__label">
           Expenses
@@ -51,7 +51,7 @@ export function CategoryDonut({
               style={{ backgroundColor: categoryPalette[index % categoryPalette.length] }}
             />
             <span>{item.category}</span>
-            <strong>{formatCurrency(item.total, currency)}</strong>
+            <strong>{formatCurrency(convertFromUsd(item.total, currency), currency)}</strong>
           </li>
         ))}
       </ul>

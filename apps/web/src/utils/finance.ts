@@ -2,6 +2,12 @@ import type { CurrencyCode, Transaction } from '../types'
 
 export const percentFormatter = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 1 })
 
+const exchangeRateByCurrency: Record<CurrencyCode, number> = {
+  INR: 83.1,
+  USD: 1,
+  EUR: 0.92,
+}
+
 const localeByCurrency: Record<CurrencyCode, string> = {
   INR: 'en-IN',
   USD: 'en-US',
@@ -23,6 +29,10 @@ export function formatCurrency(value: number, currency: CurrencyCode) {
 
 export function formatCompactCurrency(value: number, currency: CurrencyCode) {
   return createCurrencyFormatter(currency, true).format(value)
+}
+
+export function convertFromUsd(value: number, currency: CurrencyCode) {
+  return value * exchangeRateByCurrency[currency]
 }
 
 export function sumTransactions(transactions: Transaction[], type?: Transaction['type']) {
