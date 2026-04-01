@@ -80,6 +80,12 @@ pnpm lint
 - responsive table overflow
 - loading and toast feedback
 
+## Final Review Focus
+
+- tested the main edge-case states called out in the assessment notes
+- tuned the layout closer to the light dashboard screenshot from the PDF
+- kept the repo history split into meaningful steps instead of one bulk commit
+
 ## Assumptions
 
 - Transactions are mocked locally and there is no backend persistence.

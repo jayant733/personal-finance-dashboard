@@ -101,13 +101,13 @@ export function DashboardPage() {
   const currentMonth = previousMonth.at(-1)
   const priorMonth = previousMonth.at(-2)
   const monthVariance = calculateExpenseChange(currentMonth?.expense ?? 0, priorMonth?.expense ?? 0)
-  const categoryTotals = getCategoryTotals(filteredTransactions).slice(0, 5)
+  const categoryBreakdown = getCategoryTotals(filteredTransactions).slice(0, 5)
   const balanceSeries = getRunningBalanceSeries(filteredTransactions)
-  const monthlyTotals = getMonthlyTotals(filteredTransactions)
+  const monthlySummary = getMonthlyTotals(filteredTransactions)
   const recentTransactions = [...filteredTransactions]
     .sort((left, right) => right.date.localeCompare(left.date))
     .slice(0, 8)
-  const highestSpendingCategory = categoryTotals[0]
+  const highestSpendingCategory = categoryBreakdown[0]
   const netWorthGoal = 42000
   const completion = Math.min(totalBalance / netWorthGoal, 1)
   const hasNoTransactions = transactions.length === 0
@@ -248,7 +248,15 @@ export function DashboardPage() {
 
         {loading ? (
           <section className="state-card">
-            <div className="spinner" aria-hidden="true" />
+            <div className="skeleton-shell" aria-hidden="true">
+              <span className="skeleton-line skeleton-line--title" />
+              <div className="skeleton-row">
+                <span className="skeleton-card" />
+                <span className="skeleton-card" />
+                <span className="skeleton-card" />
+              </div>
+              <span className="skeleton-panel" />
+            </div>
             <p>Loading financial overview...</p>
           </section>
         ) : hasNoTransactions ? (
@@ -289,6 +297,25 @@ export function DashboardPage() {
           </section>
         ) : (
           <>
+            <section className="micro-summary">
+              <article className="micro-summary__item">
+                <span>Income</span>
+                <strong>{formatCurrency(totalIncome)}</strong>
+              </article>
+              <article className="micro-summary__item">
+                <span>Expenses</span>
+                <strong>{formatCurrency(totalExpense)}</strong>
+              </article>
+              <article className="micro-summary__item">
+                <span>Net</span>
+                <strong className={totalBalance < 0 ? 'text-danger' : undefined}>{formatCurrency(totalBalance)}</strong>
+              </article>
+              <article className="micro-summary__item">
+                <span>Reserve</span>
+                <strong>{formatCurrency(totalBalance * 0.34)}</strong>
+              </article>
+            </section>
+
             <section className="hero-grid">
               <article className="balance-card">
                 <div className="balance-card__header">
@@ -306,8 +333,8 @@ export function DashboardPage() {
                 </div>
 
                 <div className="sparkline">
-                  <BalanceChart series={balanceSeries} />
-                </div>
+                <BalanceChart series={balanceSeries} />
+              </div>
 
                 <div className="balance-card__footer">
                   <Metric label="Savings rate" value={percentFormatter.format(savingsRate)} trend="up" />
@@ -373,7 +400,7 @@ export function DashboardPage() {
                     <h2>Top categories</h2>
                   </div>
                 </div>
-                <CategoryDonut items={categoryTotals} />
+                <CategoryDonut items={categoryBreakdown} />
               </article>
 
               <article className="panel">
@@ -383,7 +410,7 @@ export function DashboardPage() {
                     <h2>Income vs expenses</h2>
                   </div>
                 </div>
-                <CashflowBars data={monthlyTotals} />
+                <CashflowBars data={monthlySummary} />
               </article>
 
               <article className="panel panel--promo">

@@ -199,22 +199,23 @@ button {
 
 .dashboard {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
   background: var(--surface);
   border-radius: 28px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 18px;
 }
 
 .topbar,
 .filters,
+.micro-summary,
 .hero-grid,
 .content-grid,
 .lower-grid {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .topbar {
@@ -230,7 +231,7 @@ button {
 }
 
 .topbar h1 {
-  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  font-size: clamp(1.8rem, 2.2vw, 2.5rem);
 }
 
 .field {
@@ -307,6 +308,29 @@ button {
   align-items: center;
 }
 
+.micro-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.micro-summary__item {
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+}
+
+.micro-summary__item span {
+  display: block;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.micro-summary__item strong {
+  font-family: "Space Grotesk", "Plus Jakarta Sans", sans-serif;
+  font-size: 1.05rem;
+}
+
 .pill-group {
   display: flex;
   flex-wrap: wrap;
@@ -320,7 +344,7 @@ button {
 }
 
 .hero-grid {
-  grid-template-columns: minmax(0, 2.4fr) repeat(2, minmax(150px, 1fr));
+  grid-template-columns: minmax(0, 2.6fr) repeat(2, minmax(160px, 1fr));
 }
 
 .balance-card,
@@ -331,9 +355,9 @@ button {
 }
 
 .balance-card {
-  padding: 20px;
+  padding: 22px;
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .balance-card__header,
@@ -366,9 +390,10 @@ button {
 }
 
 .summary-card {
-  padding: 16px;
+  min-height: 150px;
+  padding: 18px 16px;
   display: grid;
-  gap: 8px;
+  gap: 6px;
   align-content: start;
 }
 
@@ -414,11 +439,11 @@ button {
 }
 
 .content-grid {
-  grid-template-columns: minmax(0, 1.6fr) minmax(250px, 1fr) minmax(220px, 1fr);
+  grid-template-columns: minmax(0, 1.8fr) minmax(250px, 1fr) minmax(220px, 1fr);
 }
 
 .panel {
-  padding: 18px;
+  padding: 16px 18px;
   min-width: 0;
 }
 
@@ -483,6 +508,7 @@ button {
   width: 100%;
   height: 120px;
   color: var(--mint-deep);
+  animation: chartFadeIn 500ms ease;
 }
 
 .balance-chart.is-large {
@@ -595,6 +621,41 @@ button {
   background: linear-gradient(180deg, #f8c977, #f49083);
 }
 
+.skeleton-shell {
+  width: min(100%, 860px);
+  display: grid;
+  gap: 14px;
+}
+
+.skeleton-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.skeleton-line,
+.skeleton-card,
+.skeleton-panel {
+  display: block;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(140, 148, 161, 0.12), rgba(140, 148, 161, 0.22), rgba(140, 148, 161, 0.12));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.skeleton-line--title {
+  width: 42%;
+  height: 22px;
+}
+
+.skeleton-card {
+  height: 110px;
+}
+
+.skeleton-panel {
+  height: 220px;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -696,8 +757,31 @@ button {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes chartFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 1200px) {
   .app-shell,
+  .micro-summary,
   .hero-grid,
   .content-grid,
   .lower-grid,
@@ -728,6 +812,10 @@ button {
   }
 
   .transaction-form {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-row {
     grid-template-columns: 1fr;
   }
 
