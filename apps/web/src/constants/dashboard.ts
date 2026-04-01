@@ -1,4 +1,4 @@
-import type { TransactionType } from '../types'
+import type { CurrencyCode, TransactionType } from '../types'
 
 export type FilterRange = 'all' | '30d' | '90d' | 'ytd'
 
@@ -13,6 +13,8 @@ export type DraftTransaction = {
 export const sidebarItems = ['Overview', 'Accounts', 'Spending', 'Transactions', 'Goals', 'Settings']
 
 export const categoryPalette = ['#63d7c7', '#8be28d', '#f9c87a', '#f49183', '#85a7ff', '#d2d8e9']
+
+export const supportedCurrencies: CurrencyCode[] = ['INR', 'USD', 'EUR']
 
 export const initialDraftTransaction: DraftTransaction = {
   amount: '',

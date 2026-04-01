@@ -13,3 +13,5 @@ export type Transaction = {
 export type UserRole = 'viewer' | 'admin'
 
 export type ThemeMode = 'light' | 'dark'
+
+export type CurrencyCode = 'INR' | 'USD' | 'EUR'

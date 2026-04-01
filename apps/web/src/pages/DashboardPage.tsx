@@ -7,11 +7,12 @@ import { SummaryCard } from '../components/dashboard/SummaryCard'
 import {
   initialDraftTransaction,
   sidebarItems,
+  supportedCurrencies,
   type DraftTransaction,
   type FilterRange,
 } from '../constants/dashboard'
 import { seedTransactions } from '../data/transactions'
-import type { ThemeMode, Transaction, TransactionType, UserRole } from '../types'
+import type { CurrencyCode, ThemeMode, Transaction, TransactionType, UserRole } from '../types'
 import {
   calculateExpenseChange,
   downloadCsv,
@@ -19,6 +20,7 @@ import {
   formatCurrency,
   getBalance,
   getCategoryTotals,
+  getCategoryPeriodComparison,
   getInsightMessage,
   getMonthlyTotals,
   getRunningBalanceSeries,
@@ -31,6 +33,7 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState<UserRole>('admin')
   const [theme, setTheme] = useState<ThemeMode>('light')
+  const [currency, setCurrency] = useState<CurrencyCode>('INR')
   const [range, setRange] = useState<FilterRange>('90d')
   const [category, setCategory] = useState('All categories')
   const [search, setSearch] = useState('')
@@ -112,10 +115,12 @@ export function DashboardPage() {
   const completion = Math.min(totalBalance / netWorthGoal, 1)
   const hasNoTransactions = transactions.length === 0
   const hasNoFilteredResults = !hasNoTransactions && filteredTransactions.length === 0
+  const categoryComparison = getCategoryPeriodComparison(transactions, highestSpendingCategory?.category)
   const insightMessage = getInsightMessage({
     highestCategory: highestSpendingCategory,
     expenseChange: monthVariance,
     totalBalance,
+    categoryChange: categoryComparison?.change,
   })
 
   function handleCreateTransaction(event: FormEvent<HTMLFormElement>) {
@@ -183,7 +188,7 @@ export function DashboardPage() {
         <header className="topbar">
           <div>
             <span className="eyebrow">Good Morning, Jayan</span>
-            <h1>Overview dashboard</h1>
+            <h1>Financial Overview</h1>
           </div>
 
           <div className="topbar__actions">
@@ -202,6 +207,17 @@ export function DashboardPage() {
               <select value={role} onChange={(event) => setRole(event.target.value as UserRole)}>
                 <option value="admin">Admin</option>
                 <option value="viewer">Viewer</option>
+              </select>
+            </label>
+
+            <label className="field">
+              <span>Currency</span>
+              <select value={currency} onChange={(event) => setCurrency(event.target.value as CurrencyCode)}>
+                {supportedCurrencies.map((supportedCurrency) => (
+                  <option key={supportedCurrency} value={supportedCurrency}>
+                    {supportedCurrency}
+                  </option>
+                ))}
               </select>
             </label>
 
@@ -300,19 +316,19 @@ export function DashboardPage() {
             <section className="micro-summary">
               <article className="micro-summary__item">
                 <span>Income</span>
-                <strong>{formatCurrency(totalIncome)}</strong>
+                <strong>{formatCurrency(totalIncome, currency)}</strong>
               </article>
               <article className="micro-summary__item">
                 <span>Expenses</span>
-                <strong>{formatCurrency(totalExpense)}</strong>
+                <strong>{formatCurrency(totalExpense, currency)}</strong>
               </article>
               <article className="micro-summary__item">
                 <span>Net</span>
-                <strong className={totalBalance < 0 ? 'text-danger' : undefined}>{formatCurrency(totalBalance)}</strong>
+                <strong className={totalBalance < 0 ? 'text-danger' : undefined}>{formatCurrency(totalBalance, currency)}</strong>
               </article>
               <article className="micro-summary__item">
                 <span>Reserve</span>
-                <strong>{formatCurrency(totalBalance * 0.34)}</strong>
+                <strong>{formatCurrency(totalBalance * 0.34, currency)}</strong>
               </article>
             </section>
 
@@ -322,7 +338,7 @@ export function DashboardPage() {
                   <div>
                     <span>Balance</span>
                     <strong className={totalBalance < 0 ? 'text-danger' : undefined}>
-                      {formatCurrency(totalBalance)}
+                      {formatCurrency(totalBalance, currency)}
                     </strong>
                   </div>
                   <span
@@ -353,13 +369,13 @@ export function DashboardPage() {
 
               <SummaryCard
                 label="Checking"
-                value={formatCurrency(totalIncome)}
+                value={formatCurrency(totalIncome, currency)}
                 tone="success"
                 detail="Income over selected period"
               />
               <SummaryCard
                 label="Savings"
-                value={formatCurrency(totalExpense)}
+                value={formatCurrency(totalExpense, currency)}
                 tone="danger"
                 detail="Expenses over selected period"
               />
@@ -369,13 +385,14 @@ export function DashboardPage() {
                   filteredTransactions
                     .filter((transaction) => transaction.category === 'Investments')
                     .reduce((sum, transaction) => sum + transaction.amount, 0),
+                  currency,
                 )}
                 tone="info"
                 detail="Brokerage and fund activity"
               />
               <SummaryCard
                 label="Cash reserve"
-                value={formatCurrency(totalBalance * 0.34)}
+                value={formatCurrency(totalBalance * 0.34, currency)}
                 tone="neutral"
                 detail="Instant access savings"
               />
@@ -388,7 +405,7 @@ export function DashboardPage() {
                     <span className="eyebrow">Portfolio trend</span>
                     <h2>Balance history</h2>
                   </div>
-                  <strong>{formatCompactCurrency(totalBalance)}</strong>
+                  <strong>{formatCompactCurrency(totalBalance, currency)}</strong>
                 </div>
                 <BalanceChart series={balanceSeries} large />
               </article>
@@ -400,7 +417,7 @@ export function DashboardPage() {
                     <h2>Top categories</h2>
                   </div>
                 </div>
-                <CategoryDonut items={categoryBreakdown} />
+                <CategoryDonut items={categoryBreakdown} currency={currency} />
               </article>
 
               <article className="panel">
@@ -432,7 +449,7 @@ export function DashboardPage() {
                 <div className="panel__heading">
                   <div>
                     <span className="eyebrow">Admin controls</span>
-                    <h2>Add a transaction</h2>
+                    <h2>Record a transaction</h2>
                   </div>
                   <span className={`badge ${role === 'admin' ? 'is-positive' : ''}`}>
                     {role === 'admin' ? 'Editable' : 'Viewer locked'}
@@ -541,7 +558,7 @@ export function DashboardPage() {
                   </li>
                   <li>
                     <span>Total category spend</span>
-                    <strong>{formatCurrency(highestSpendingCategory?.total ?? 0)}</strong>
+                    <strong>{formatCurrency(highestSpendingCategory?.total ?? 0, currency)}</strong>
                   </li>
                   <li>
                     <span>Current savings rate</span>
@@ -599,7 +616,7 @@ export function DashboardPage() {
                           }
                         >
                           {transaction.type === 'income' ? '+' : '-'}
-                          {formatCurrency(transaction.amount)}
+                          {formatCurrency(transaction.amount, currency)}
                         </td>
                         <td>
                           <button
