@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.turbo/
+dist/
+coverage/
+pdf_extract/
+apps/web/src/assets/
+*.log
+*.tmp
