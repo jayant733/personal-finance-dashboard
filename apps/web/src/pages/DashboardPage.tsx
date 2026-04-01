@@ -13,11 +13,13 @@ import {
 import { seedTransactions } from '../data/transactions'
 import type { ThemeMode, Transaction, TransactionType, UserRole } from '../types'
 import {
+  calculateExpenseChange,
   downloadCsv,
   formatCompactCurrency,
   formatCurrency,
   getBalance,
   getCategoryTotals,
+  getInsightMessage,
   getMonthlyTotals,
   getRunningBalanceSeries,
   percentFormatter,
@@ -97,10 +99,7 @@ export function DashboardPage() {
   const previousMonth = getMonthlyTotals(transactions).slice(-2)
   const currentMonth = previousMonth.at(-1)
   const priorMonth = previousMonth.at(-2)
-  const monthVariance =
-    currentMonth && priorMonth && priorMonth.expense > 0
-      ? (currentMonth.expense - priorMonth.expense) / priorMonth.expense
-      : 0
+  const monthVariance = calculateExpenseChange(currentMonth?.expense ?? 0, priorMonth?.expense ?? 0)
   const categoryTotals = getCategoryTotals(filteredTransactions).slice(0, 5)
   const balanceSeries = getRunningBalanceSeries(filteredTransactions)
   const monthlyTotals = getMonthlyTotals(filteredTransactions)
@@ -110,12 +109,19 @@ export function DashboardPage() {
   const highestSpendingCategory = categoryTotals[0]
   const netWorthGoal = 42000
   const completion = Math.min(totalBalance / netWorthGoal, 1)
+  const hasNoTransactions = transactions.length === 0
+  const hasNoFilteredResults = !hasNoTransactions && filteredTransactions.length === 0
+  const insightMessage = getInsightMessage({
+    highestCategory: highestSpendingCategory,
+    expenseChange: monthVariance,
+    totalBalance,
+  })
 
   function handleCreateTransaction(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (role !== 'admin') return
     const amount = Number(draft.amount)
-    if (!amount || !draft.description.trim()) {
+    if (!Number.isFinite(amount) || amount <= 0 || !draft.description.trim()) {
       setToast('Add a description and amount to create a transaction.')
       return
     }
@@ -243,10 +249,41 @@ export function DashboardPage() {
             <div className="spinner" aria-hidden="true" />
             <p>Loading financial overview...</p>
           </section>
-        ) : filteredTransactions.length === 0 ? (
+        ) : hasNoTransactions ? (
+          <section className="state-card">
+            <h2>No transactions yet</h2>
+            <p>Start by adding your first transaction to populate charts, insights, and account cards.</p>
+            <button
+              className="solid-button"
+              type="button"
+              disabled={role !== 'admin'}
+              title={role === 'admin' ? 'Ready to add a transaction' : 'Switch to admin to edit'}
+              onClick={() =>
+                setToast(
+                  role === 'admin'
+                    ? 'Use the admin form below to add a transaction.'
+                    : 'Switch to admin to edit',
+                )
+              }
+            >
+              Add Transaction
+            </button>
+          </section>
+        ) : hasNoFilteredResults ? (
           <section className="state-card">
             <h2>No transactions match this filter</h2>
             <p>Try widening the date range or clearing the search to repopulate the dashboard.</p>
+            <button
+              className="ghost-button"
+              type="button"
+              onClick={() => {
+                setSearch('')
+                setCategory('All categories')
+                setRange('all')
+              }}
+            >
+              Reset filters
+            </button>
           </section>
         ) : (
           <>
@@ -255,10 +292,14 @@ export function DashboardPage() {
                 <div className="balance-card__header">
                   <div>
                     <span>Balance</span>
-                    <strong>{formatCurrency(totalBalance)}</strong>
+                    <strong className={totalBalance < 0 ? 'text-danger' : undefined}>
+                      {formatCurrency(totalBalance)}
+                    </strong>
                   </div>
-                  <span className={`badge ${monthVariance <= 0 ? 'is-positive' : 'is-warning'}`}>
-                    {monthVariance <= 0 ? 'Improving' : 'Watch spend'}
+                  <span
+                    className={`badge ${totalBalance < 0 || monthVariance > 0 ? 'is-warning' : 'is-positive'}`}
+                  >
+                    {totalBalance < 0 ? 'Negative balance' : monthVariance <= 0 ? 'Improving' : 'Watch spend'}
                   </span>
                 </div>
 
@@ -273,7 +314,11 @@ export function DashboardPage() {
                     value={percentFormatter.format(Math.abs(monthVariance))}
                     trend={monthVariance <= 0 ? 'up' : 'down'}
                   />
-                  <Metric label="Goal progress" value={percentFormatter.format(completion)} trend="up" />
+                  <Metric
+                    label="Goal progress"
+                    value={percentFormatter.format(Math.max(0, completion))}
+                    trend={completion >= 0 ? 'up' : 'down'}
+                  />
                 </div>
               </article>
 
@@ -445,6 +490,11 @@ export function DashboardPage() {
                     Add transaction
                   </button>
                 </form>
+                {role !== 'admin' ? (
+                  <p className="form-hint" aria-live="polite">
+                    Switch to admin to edit transactions and unlock form controls.
+                  </p>
+                ) : null}
               </article>
 
               <article className="panel">
@@ -454,6 +504,7 @@ export function DashboardPage() {
                     <h2>What changed</h2>
                   </div>
                 </div>
+                <p className="insight-copy">{insightMessage}</p>
                 <ul className="insights-list">
                   <li>
                     <span>Highest spending category</span>
@@ -526,6 +577,7 @@ export function DashboardPage() {
                             className="table-action"
                             type="button"
                             disabled={role !== 'admin'}
+                            title={role === 'admin' ? 'Delete transaction' : 'Switch to admin to edit'}
                             onClick={() => handleDeleteTransaction(transaction.id)}
                           >
                             Delete

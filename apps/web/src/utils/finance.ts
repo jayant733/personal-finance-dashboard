@@ -59,6 +59,35 @@ export function getRunningBalanceSeries(transactions: Transaction[]) {
   })
 }
 
+export function calculateExpenseChange(currentExpense: number, previousExpense: number) {
+  if (previousExpense <= 0) return currentExpense > 0 ? 1 : 0
+  return (currentExpense - previousExpense) / previousExpense
+}
+
+export function getInsightMessage({
+  highestCategory,
+  expenseChange,
+  totalBalance,
+}: {
+  highestCategory?: { category: string; total: number }
+  expenseChange: number
+  totalBalance: number
+}) {
+  if (highestCategory && expenseChange > 0) {
+    return `You spent ${percentFormatter.format(expenseChange)} more on ${highestCategory.category} this period.`
+  }
+
+  if (highestCategory && expenseChange < 0) {
+    return `${highestCategory.category} spend eased by ${percentFormatter.format(Math.abs(expenseChange))} compared to the prior month.`
+  }
+
+  if (totalBalance < 0) {
+    return 'Your balance is negative right now, so reducing short-term spend should be the first priority.'
+  }
+
+  return 'Your spending pattern is stable this period, with no major spikes across tracked categories.'
+}
+
 export function downloadCsv(transactions: Transaction[]) {
   const rows = [
     ['Date', 'Description', 'Category', 'Type', 'Account', 'Amount'],
