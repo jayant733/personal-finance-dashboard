@@ -80,6 +80,7 @@ export function DashboardPage() {
     }
 
     return transactions.filter((transaction) => {
+      // Keep the dashboard metrics and the table driven by one shared filtered view.
       const matchesRange = range === 'all' ? true : new Date(transaction.date) >= startDate
       const matchesCategory = category === 'All categories' || transaction.category === category
       const matchesSearch =
@@ -136,6 +137,7 @@ export function DashboardPage() {
       account: draft.account,
     }
 
+    // Prepending the new record keeps the latest transaction visible without extra sorting work.
     setTransactions((current) => [newTransaction, ...current])
     setDraft(initialDraftTransaction)
     setToast('Transaction added successfully.')

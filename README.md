@@ -1,38 +1,92 @@
-# Finance Dashboard Assessment
+# Personal Finance Dashboard
 
-This workspace contains a finance dashboard implementation built from the provided design guide in [Finance Dashboard UI_ Design & Implementation Guide.pdf](C:\Users\jayan\Downloads\Finance Dashboard UI_ Design & Implementation Guide.pdf).
+A frontend assessment project based on the provided finance dashboard design guide. The goal of this implementation was to build a polished, responsive dashboard that feels close to a production-ready personal finance product rather than a static demo.
 
-## Stack
+## Live Project Shape
 
-- `pnpm` workspace with `turbo` at the repo root
-- `React` + `TypeScript` + `Vite` in [`apps/web`](C:\Users\jayan\Desktop\Assesment\apps\web)
-- Custom CSS and SVG-driven charts for close visual control
+- `pnpm` workspace managed with `turbo`
+- main app inside `apps/web`
+- `React + TypeScript + Vite`
+- custom CSS and SVG charts for tighter visual control
 
-## Features
+## What The App Includes
 
-- Dashboard layout modeled after the guide's light finance UI references
-- Summary cards, large balance trend chart, category donut chart, and monthly cashflow chart
-- Transactions table with search, date filtering, category filtering, zebra rows, and CSV export
-- Simulated `viewer` and `admin` role toggle
-- Admin-only add and delete transaction actions
-- Loading state, empty state, success toast, and dark mode toggle
-- Responsive layout for desktop, tablet, and mobile
+- summary cards for balance, cashflow, savings, and reserves
+- balance trend chart and monthly cashflow chart
+- category breakdown donut chart
+- searchable and filterable transactions table
+- role-based UI with `viewer` and `admin`
+- add and delete transaction flows
+- loading, empty, no-results, and toast feedback states
+- dark mode and responsive layout support
 
-## Run
+## Why This Stack
+
+I chose a Turbo workspace even though the submission currently has one app because it keeps the repo scalable and organized if shared utilities, tests, or another frontend surface need to be added later.
+
+React with TypeScript and Vite kept the development loop fast while still giving enough structure for reusable components, typed transaction models, and maintainable state handling.
+
+## Folder Structure
+
+```text
+.
+|-- apps/
+|   `-- web/
+|       |-- src/
+|       |   |-- components/
+|       |   |-- constants/
+|       |   |-- data/
+|       |   |-- pages/
+|       |   |-- utils/
+|       |   `-- types.ts
+|-- package.json
+|-- pnpm-workspace.yaml
+`-- turbo.json
+```
+
+## Running Locally
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-To create a production build:
+Production build:
 
 ```bash
 pnpm build
 ```
 
-## Notes
+Lint:
 
-- I chose a Turbo workspace so the assessment can scale cleanly if you later add shared packages, tests, or another app surface.
-- For this first pass, I matched the overall composition and styling language of the PDF examples rather than recreating one screenshot pixel-for-pixel from an exported design file.
-- The extracted PDF pages are available in [`pdf_extract`](C:\Users\jayan\Desktop\Assesment\pdf_extract) for reference while refining the UI further.
+```bash
+pnpm lint
+```
+
+## Product Decisions
+
+- One filtered transaction source powers the cards, charts, and table so the dashboard stays consistent after every interaction.
+- Viewer mode disables editing affordances instead of hiding the entire workflow, which makes the role difference obvious during review.
+- The empty states are intentionally explicit so the app still feels designed even with no data or restrictive filters.
+- The charts are lightweight custom SVG components to keep the visual style under control and avoid over-depending on chart libraries for a small assessment.
+
+## QA Checklist Covered
+
+- empty transaction state
+- no matching search or filter results
+- viewer/admin restrictions
+- add and delete actions updating dashboard metrics
+- negative balance styling
+- responsive table overflow
+- loading and toast feedback
+
+## Assumptions
+
+- Transactions are mocked locally and there is no backend persistence.
+- The dashboard is optimized around the light finance references in the PDF, with an additional dark mode for polish.
+- Currency is formatted in USD for consistency across the seeded dataset.
+
+## Repository Notes
+
+- The extracted PDF reference images were used during implementation but are intentionally ignored from git.
+- Commit history is split into meaningful steps so reviewers can follow the project evolution more easily.

@@ -153,6 +153,10 @@ button {
   color: var(--text);
 }
 
+.sidebar__item:hover {
+  background: rgba(76, 185, 165, 0.08);
+}
+
 .sidebar__bullet {
   width: 8px;
   height: 8px;
@@ -616,6 +620,10 @@ button {
 
 .transactions-table tbody tr:nth-child(even) {
   background: rgba(104, 114, 132, 0.04);
+}
+
+.transactions-table tbody tr:hover {
+  background: rgba(76, 185, 165, 0.08);
 }
 
 .amount {
