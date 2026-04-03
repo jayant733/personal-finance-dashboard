@@ -12,6 +12,15 @@ export type DraftTransaction = {
 
 export const sidebarItems = ['Overview', 'Accounts', 'Spending', 'Transactions', 'Goals', 'Settings']
 
+export const sidebarRoutes = [
+  { label: 'Overview', path: '/' },
+  { label: 'Accounts', path: '/accounts' },
+  { label: 'Spending', path: '/spending' },
+  { label: 'Transactions', path: '/transactions' },
+  { label: 'Goals', path: '/goals' },
+  { label: 'Settings', path: '/settings' },
+] as const
+
 export const categoryPalette = ['#63d7c7', '#8be28d', '#f9c87a', '#f49183', '#85a7ff', '#d2d8e9']
 
 export const supportedCurrencies: CurrencyCode[] = ['INR', 'USD', 'EUR']

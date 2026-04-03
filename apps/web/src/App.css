@@ -154,6 +154,7 @@ button {
   border-radius: 12px;
   text-align: left;
   font-size: 0.92rem;
+  text-decoration: none;
 }
 
 .sidebar__item.is-active {
@@ -475,6 +476,32 @@ button {
 
 .content-grid {
   grid-template-columns: minmax(0, 1.8fr) minmax(250px, 1fr) minmax(220px, 1fr);
+}
+
+.page-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.page-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page-grid--spending {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+.page-value {
+  display: block;
+  margin: 10px 0 12px;
+  font-family: "Space Grotesk", "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+}
+
+.panel-copy {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.6;
 }
 
 .panel {
@@ -825,6 +852,8 @@ button {
   .micro-summary,
   .hero-grid,
   .content-grid,
+  .page-grid--two,
+  .page-grid--spending,
   .lower-grid,
   .filters,
   .topbar {
