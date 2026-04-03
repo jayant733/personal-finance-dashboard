@@ -38,6 +38,11 @@
   box-sizing: border-box;
 }
 
+img,
+svg {
+  display: block;
+}
+
 html,
 body,
 #root {
@@ -215,6 +220,7 @@ button {
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   padding: 18px;
+  content-visibility: auto;
 }
 
 .topbar,
@@ -571,6 +577,7 @@ button {
   height: 120px;
   color: var(--mint-deep);
   animation: chartFadeIn 500ms ease;
+  contain: layout paint;
 }
 
 .balance-chart.is-large {
@@ -720,6 +727,7 @@ button {
 
 .table-wrap {
   overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .transactions-table {

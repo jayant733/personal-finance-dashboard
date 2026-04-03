@@ -40,6 +40,9 @@ export function RouteMeta({
     const robotsTag = ensureMeta('robots')
     robotsTag.content = 'index,follow'
 
+    const viewportTag = ensureMeta('viewport')
+    viewportTag.content = 'width=device-width, initial-scale=1'
+
     const canonicalHref = `${siteUrl}${path}`
     let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
     if (!canonical) {
@@ -53,6 +56,10 @@ export function RouteMeta({
     ensureProperty('og:description').content = description
     ensureProperty('og:type').content = 'website'
     ensureProperty('og:url').content = canonicalHref
+
+    ensureMeta('twitter:card').content = 'summary_large_image'
+    ensureMeta('twitter:title').content = `${title} | Finless`
+    ensureMeta('twitter:description').content = description
   }, [description, path, title])
 
   return null
