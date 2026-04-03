@@ -9,6 +9,10 @@ export function CategoryDonut({
   items: Array<{ category: string; total: number }>
   currency: CurrencyCode
 }) {
+  if (items.length === 0) {
+    return <div className="chart-empty chart-empty--large">No category data for the current filter.</div>
+  }
+
   const total = items.reduce((sum, item) => sum + item.total, 0)
   const segments = items.map((item) => (total === 0 ? 0 : (item.total / total) * 263.89))
   const offsets = segments.map((_, index) => segments.slice(0, index).reduce((sum, value) => sum + value + 6, 0))

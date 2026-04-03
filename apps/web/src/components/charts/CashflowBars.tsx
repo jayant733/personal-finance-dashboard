@@ -3,6 +3,10 @@ export function CashflowBars({
 }: {
   data: Array<{ month: string; label: string; income: number; expense: number }>
 }) {
+  if (data.length === 0) {
+    return <div className="chart-empty chart-empty--large">No cashflow data for the current filter.</div>
+  }
+
   const highest = Math.max(...data.flatMap((item) => [item.income, item.expense]), 1)
 
   return (

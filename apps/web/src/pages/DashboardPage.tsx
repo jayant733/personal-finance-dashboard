@@ -50,7 +50,7 @@ export function DashboardPage() {
 
       <TopControls
         title="Financial Overview"
-        eyebrow="Good Morning, Jayan"
+        eyebrow="Good Morning, Jayant"
         search={search}
         setSearch={setSearch}
         role={role}
@@ -85,16 +85,20 @@ export function DashboardPage() {
           <h2>No transactions yet</h2>
           <p>Start by adding your first transaction on the transactions page to populate the overview.</p>
         </section>
-      ) : hasNoFilteredResults ? (
-        <section className="state-card">
-          <h2>No transactions match this filter</h2>
-          <p>Try widening the date range or clearing the search to repopulate the dashboard.</p>
-          <button className="ghost-button" type="button" onClick={resetFilters}>
-            Reset filters
-          </button>
-        </section>
       ) : (
         <>
+          {hasNoFilteredResults ? (
+            <section className="panel inline-state">
+              <div>
+                <h2>No results found</h2>
+                <p>Try widening the date range or clearing the search to repopulate the dashboard.</p>
+                <button className="ghost-button" type="button" onClick={resetFilters}>
+                  Reset filters
+                </button>
+              </div>
+            </section>
+          ) : null}
+
           <section className="micro-summary">
             <article className="micro-summary__item">
               <span>Income</span>

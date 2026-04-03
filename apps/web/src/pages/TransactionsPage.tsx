@@ -160,26 +160,34 @@ export function TransactionsPage() {
               </tr>
             </thead>
             <tbody>
-              {recentTransactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{transaction.date}</td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.category}</td>
-                  <td>{transaction.account}</td>
-                  <td>
-                    <span className={`table-badge ${transaction.type === 'income' ? 'is-income' : 'is-expense'}`}>{transaction.type}</span>
-                  </td>
-                  <td className={transaction.type === 'income' ? 'amount amount--positive' : 'amount'}>
-                    {transaction.type === 'income' ? '+' : '-'}
-                    {formatCurrency(asDisplayCurrency(transaction.amount), currency)}
-                  </td>
-                  <td>
-                    <button className="table-action" type="button" disabled={role !== 'admin'} title={role === 'admin' ? 'Delete transaction' : 'Switch to admin to edit'} onClick={() => handleDeleteTransaction(transaction.id)}>
-                      Delete
-                    </button>
+              {recentTransactions.length === 0 ? (
+                <tr className="table-row-empty">
+                  <td className="table-empty" colSpan={7}>
+                    No results found for the current search or filter.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                recentTransactions.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <td>{transaction.date}</td>
+                    <td>{transaction.description}</td>
+                    <td>{transaction.category}</td>
+                    <td>{transaction.account}</td>
+                    <td>
+                      <span className={`table-badge ${transaction.type === 'income' ? 'is-income' : 'is-expense'}`}>{transaction.type}</span>
+                    </td>
+                    <td className={transaction.type === 'income' ? 'amount amount--positive' : 'amount'}>
+                      {transaction.type === 'income' ? '+' : '-'}
+                      {formatCurrency(asDisplayCurrency(transaction.amount), currency)}
+                    </td>
+                    <td>
+                      <button className="table-action" type="button" disabled={role !== 'admin'} title={role === 'admin' ? 'Delete transaction' : 'Switch to admin to edit'} onClick={() => handleDeleteTransaction(transaction.id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -48,9 +48,9 @@ export function AccountsPage() {
         onExport={() => downloadCsv(filteredTransactions)}
       />
 
-      <section className="page-grid page-grid--two">
-        {accounts.map((account) => (
-          <article key={account.name} className="panel">
+      <section className="page-grid page-grid--two page-grid--accounts">
+        {accounts.map((account, index) => (
+          <article key={account.name} className={`panel account-card ${index === 0 ? 'account-card--featured' : ''}`}>
             <span className="eyebrow">Account snapshot</span>
             <h2>{account.name}</h2>
             <strong className="page-value">{formatCurrency(asDisplayCurrency(account.amount), currency)}</strong>

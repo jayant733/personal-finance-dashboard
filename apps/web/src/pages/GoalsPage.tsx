@@ -43,14 +43,14 @@ export function GoalsPage() {
       />
 
       <section className="page-grid page-grid--two">
-        <article className="panel">
+        <article className="panel panel--centered">
           <span className="eyebrow">Goal progress</span>
           <h2>Net worth target</h2>
           <strong className="page-value">{formatCurrency(asDisplayCurrency(netWorthGoal), currency)}</strong>
           <p className="panel-copy">Current completion: {percentFormatter.format(Math.max(0, completion))}</p>
         </article>
 
-        <article className="panel">
+        <article className="panel panel--centered">
           <span className="eyebrow">Emergency fund</span>
           <h2>Runway coverage</h2>
           <strong className="page-value">{Math.max(1, Math.round(totalBalance / (totalExpense / 3 || 1)))} months</strong>
