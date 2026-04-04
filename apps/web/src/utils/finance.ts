@@ -174,3 +174,16 @@ export function downloadCsv(transactions: Transaction[]) {
   link.remove()
   URL.revokeObjectURL(url)
 }
+
+export function downloadJson(transactions: Transaction[]) {
+  const payload = JSON.stringify(transactions, null, 2)
+  const blob = new Blob([payload], { type: 'application/json;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'finance-dashboard-transactions.json'
+  document.body.append(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}

@@ -1,7 +1,7 @@
 import { RouteMeta } from '../components/seo/RouteMeta'
 import { TopControls } from '../components/dashboard/TopControls'
 import { useDashboard } from '../context/DashboardContext'
-import { downloadCsv } from '../utils/finance'
+import { downloadCsv, downloadJson } from '../utils/finance'
 
 export function SettingsPage() {
   const {
@@ -34,7 +34,8 @@ export function SettingsPage() {
         setCurrency={setCurrency}
         themeChecked={theme === 'dark'}
         onThemeChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-        onExport={() => downloadCsv(filteredTransactions)}
+        onExportCsv={() => downloadCsv(filteredTransactions)}
+        onExportJson={() => downloadJson(filteredTransactions)}
       />
 
       <section className="page-grid page-grid--two">

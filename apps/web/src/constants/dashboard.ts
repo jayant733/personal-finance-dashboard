@@ -30,5 +30,5 @@ export const initialDraftTransaction: DraftTransaction = {
   category: 'Groceries',
   type: 'expense',
   description: '',
-  account: 'Primary checking',
+  account: 'SBI Savings',
 }

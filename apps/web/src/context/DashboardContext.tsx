@@ -31,6 +31,23 @@ import {
   sumTransactions,
 } from '../utils/finance'
 
+const STORAGE_KEYS = {
+  transactions: 'finance-dashboard-transactions',
+  role: 'finance-dashboard-role',
+  theme: 'finance-dashboard-theme',
+  currency: 'finance-dashboard-currency',
+} as const
+
+function readStoredValue<T>(key: string, fallback: T) {
+  if (typeof window === 'undefined') return fallback
+  try {
+    const rawValue = window.localStorage.getItem(key)
+    return rawValue ? (JSON.parse(rawValue) as T) : fallback
+  } catch {
+    return fallback
+  }
+}
+
 type DashboardContextValue = {
   transactions: Transaction[]
   filteredTransactions: Transaction[]
@@ -79,9 +96,11 @@ const DashboardContext = createContext<DashboardContextValue | null>(null)
 export function DashboardProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
-  const [role, setRole] = useState<UserRole>('admin')
-  const [theme, setTheme] = useState<ThemeMode>('light')
-  const [currency, setCurrency] = useState<CurrencyCode>('INR')
+  const [role, setRole] = useState<UserRole>(() => readStoredValue<UserRole>(STORAGE_KEYS.role, 'admin'))
+  const [theme, setTheme] = useState<ThemeMode>(() => readStoredValue<ThemeMode>(STORAGE_KEYS.theme, 'light'))
+  const [currency, setCurrency] = useState<CurrencyCode>(() =>
+    readStoredValue<CurrencyCode>(STORAGE_KEYS.currency, 'INR'),
+  )
   const [range, setRange] = useState<FilterRange>('90d')
   const [category, setCategory] = useState('All categories')
   const [search, setSearch] = useState('')
@@ -93,7 +112,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       startTransition(() => {
-        setTransactions(seedTransactions)
+        setTransactions(readStoredValue<Transaction[]>(STORAGE_KEYS.transactions, seedTransactions))
         setLoading(false)
       })
     }, 900)
@@ -110,6 +129,23 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+
+  useEffect(() => {
+    if (loading) return
+    window.localStorage.setItem(STORAGE_KEYS.transactions, JSON.stringify(transactions))
+  }, [loading, transactions])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.role, JSON.stringify(role))
+  }, [role])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(theme))
+  }, [theme])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.currency, JSON.stringify(currency))
+  }, [currency])
 
   const categories = useMemo(
     () => ['All categories', ...new Set(seedTransactions.map((transaction) => transaction.category))],

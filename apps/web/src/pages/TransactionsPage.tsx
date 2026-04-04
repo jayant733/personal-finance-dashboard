@@ -2,7 +2,7 @@ import type { TransactionType } from '../types'
 import { TopControls } from '../components/dashboard/TopControls'
 import { RouteMeta } from '../components/seo/RouteMeta'
 import { useDashboard } from '../context/DashboardContext'
-import { downloadCsv, formatCurrency, percentFormatter } from '../utils/finance'
+import { downloadCsv, downloadJson, formatCurrency, percentFormatter } from '../utils/finance'
 
 export function TransactionsPage() {
   const {
@@ -50,7 +50,8 @@ export function TransactionsPage() {
         setCurrency={setCurrency}
         themeChecked={theme === 'dark'}
         onThemeChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-        onExport={() => downloadCsv(filteredTransactions)}
+        onExportCsv={() => downloadCsv(filteredTransactions)}
+        onExportJson={() => downloadJson(filteredTransactions)}
         range={range}
         setRange={setRange}
         category={category}

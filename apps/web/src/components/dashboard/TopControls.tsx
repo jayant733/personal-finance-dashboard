@@ -12,7 +12,8 @@ type Props = {
   setCurrency: (currency: CurrencyCode) => void
   themeChecked: boolean
   onThemeChange: (checked: boolean) => void
-  onExport: () => void
+  onExportCsv: () => void
+  onExportJson: () => void
   range?: FilterRange
   setRange?: (range: FilterRange) => void
   category?: string
@@ -31,7 +32,8 @@ export function TopControls({
   setCurrency,
   themeChecked,
   onThemeChange,
-  onExport,
+  onExportCsv,
+  onExportJson,
   range,
   setRange,
   category,
@@ -81,8 +83,12 @@ export function TopControls({
             <span>{themeChecked ? 'Dark' : 'Light'}</span>
           </label>
 
-          <button className="ghost-button" type="button" onClick={onExport}>
+          <button className="ghost-button" type="button" onClick={onExportCsv}>
             Export CSV
+          </button>
+
+          <button className="ghost-button" type="button" onClick={onExportJson}>
+            Export JSON
           </button>
         </div>
       </header>
