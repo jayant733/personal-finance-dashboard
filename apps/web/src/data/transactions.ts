@@ -4,7 +4,7 @@ export const seedTransactions: Transaction[] = [
   { id: 'txn-001', date: '2026-01-02', amount: 650, category: 'Salary', type: 'income', description: 'Monthly salary credited', account: 'SBI Savings' },
   { id: 'txn-002', date: '2026-01-04', amount: 85, category: 'Groceries', type: 'expense', description: 'BigBasket grocery order', account: 'SBI Savings' },
   { id: 'txn-003', date: '2026-01-07', amount: 220, category: 'Utilities', type: 'expense', description: 'Electricity + WiFi bill', account: 'SBI Savings' },
-  { id: 'txn-004', date: '2026-01-09', amount: 20, category: 'Transport', type: 'expense', description: 'Metro card recharge', account: 'Metro Card' },
+  { id: 'txn-004', date: '2026-01-09', amount: 200, category: 'Transport', type: 'expense', description: 'Metro card recharge', account: 'Metro Card' },
   { id: 'txn-005', date: '2026-01-11', amount: 1200, category: 'Freelance', type: 'income', description: 'Website redesign payment', account: 'HDFC Savings' },
   { id: 'txn-006', date: '2026-01-13', amount: 45, category: 'Dining', type: 'expense', description: 'Cafe coffee + snacks', account: 'HDFC Credit Card' },
   { id: 'txn-007', date: '2026-01-15', amount: 320, category: 'Shopping', type: 'expense', description: 'Amazon desk setup items', account: 'HDFC Credit Card' },
