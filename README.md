@@ -2,6 +2,8 @@
 
 A frontend assessment project based on the provided finance dashboard design guide. The goal of this implementation was to build a polished, responsive dashboard that feels close to a production-ready personal finance product rather than a static demo.
 
+Demo video: [Watch the walkthrough](https://drive.google.com/file/d/1DRsWVSKAuR4alZN_HwmLM4NGxIAMfSEE/view?usp=sharing)
+
 ## Live Project Shape
 
 - `pnpm` workspace managed with `turbo`
@@ -23,9 +25,19 @@ A frontend assessment project based on the provided finance dashboard design gui
 ## Screenshots
 
 <p align="center">
-  <img src="./docs/screenshots/dashboard-overview.png" alt="Dashboard overview" width="32%" />
-  <img src="./docs/screenshots/dashboard-analytics.png" alt="Dashboard analytics" width="32%" />
-  <img src="./docs/screenshots/dashboard-transactions.png" alt="Dashboard transactions" width="32%" />
+  <img src="./docs/screenshots/overview-top.png" alt="Overview top section" width="32%" />
+  <img src="./docs/screenshots/overview-bottom.png" alt="Overview charts and insights" width="32%" />
+  <img src="./docs/screenshots/accounts-page.png" alt="Accounts page" width="32%" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/spending-page.png" alt="Spending page" width="32%" />
+  <img src="./docs/screenshots/transactions-page.png" alt="Transactions page" width="32%" />
+  <img src="./docs/screenshots/goals-page.png" alt="Goals page" width="32%" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/settings-page.png" alt="Settings page" width="48%" />
 </p>
 
 ## Why This Stack
