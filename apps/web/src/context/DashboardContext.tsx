@@ -35,6 +35,7 @@ type DashboardContextValue = {
   transactions: Transaction[]
   filteredTransactions: Transaction[]
   categories: string[]
+  accounts: string[]
   loading: boolean
   role: UserRole
   setRole: (role: UserRole) => void
@@ -114,6 +115,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     () => ['All categories', ...new Set(seedTransactions.map((transaction) => transaction.category))],
     [],
   )
+  const accounts = useMemo(() => [...new Set(seedTransactions.map((transaction) => transaction.account))], [])
 
   const filteredTransactions = useMemo(() => {
     const now = new Date('2026-04-15')
@@ -215,6 +217,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         transactions,
         filteredTransactions,
         categories,
+        accounts,
         loading,
         role,
         setRole,

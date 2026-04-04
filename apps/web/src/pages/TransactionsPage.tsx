@@ -7,6 +7,7 @@ import { downloadCsv, formatCurrency, percentFormatter } from '../utils/finance'
 export function TransactionsPage() {
   const {
     filteredTransactions,
+    accounts,
     categories,
     role,
     setRole,
@@ -98,11 +99,11 @@ export function TransactionsPage() {
             <label className="field">
               <span>Account</span>
               <select value={draft.account} disabled={role !== 'admin'} onChange={(event) => setDraft((current) => ({ ...current, account: event.target.value }))}>
-                <option>Primary checking</option>
-                <option>Savings account</option>
-                <option>Credit card</option>
-                <option>Brokerage</option>
-                <option>Travel card</option>
+                {accounts.map((accountName) => (
+                  <option key={accountName} value={accountName}>
+                    {accountName}
+                  </option>
+                ))}
               </select>
             </label>
             <button className="solid-button" type="submit" disabled={role !== 'admin'}>

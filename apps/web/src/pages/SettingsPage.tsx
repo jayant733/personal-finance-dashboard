@@ -38,12 +38,12 @@ export function SettingsPage() {
       />
 
       <section className="page-grid page-grid--two">
-        <article className="panel">
+        <article className="panel panel--centered">
           <span className="eyebrow">Appearance</span>
           <h2>Theme mode</h2>
           <p className="panel-copy">Toggle between dark and light themes using the global switch in the page header.</p>
         </article>
-        <article className="panel">
+        <article className="panel panel--centered">
           <span className="eyebrow">Localization</span>
           <h2>Currency</h2>
           <p className="panel-copy">Switch between INR, USD, and EUR with real value conversion applied across the dashboard.</p>

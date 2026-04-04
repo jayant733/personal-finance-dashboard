@@ -21,6 +21,14 @@ export function GoalsPage() {
     asDisplayCurrency,
   } = useDashboard()
 
+  const averageMonthlyExpense = totalExpense / 3
+  const runwayMonths =
+    averageMonthlyExpense <= 0
+      ? totalBalance > 0
+        ? '12+ months'
+        : '0 months'
+      : `${Math.max(1, Math.round(totalBalance / averageMonthlyExpense))} months`
+
   return (
     <>
       <RouteMeta
@@ -53,7 +61,7 @@ export function GoalsPage() {
         <article className="panel panel--centered">
           <span className="eyebrow">Emergency fund</span>
           <h2>Runway coverage</h2>
-          <strong className="page-value">{Math.max(1, Math.round(totalBalance / (totalExpense / 3 || 1)))} months</strong>
+          <strong className="page-value">{runwayMonths}</strong>
           <p className="panel-copy">Reserve available: {formatCurrency(asDisplayCurrency(totalBalance * 0.34), currency)}</p>
         </article>
       </section>

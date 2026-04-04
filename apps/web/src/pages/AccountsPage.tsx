@@ -6,6 +6,7 @@ import { downloadCsv, formatCurrency } from '../utils/finance'
 export function AccountsPage() {
   const {
     filteredTransactions,
+    accounts,
     role,
     setRole,
     theme,
@@ -14,18 +15,27 @@ export function AccountsPage() {
     setCurrency,
     search,
     setSearch,
-    totalIncome,
-    totalExpense,
-    totalBalance,
     asDisplayCurrency,
   } = useDashboard()
 
-  const accounts = [
-    { name: 'Primary checking', amount: totalIncome * 0.54, note: 'Daily transactions and salary credits' },
-    { name: 'Savings account', amount: totalBalance * 0.21, note: 'Emergency fund and buffer cash' },
-    { name: 'Brokerage', amount: filteredTransactions.filter((t) => t.account === 'Brokerage').reduce((sum, t) => sum + (t.type === 'income' ? t.amount : 0), 0), note: 'Long-term investment activity' },
-    { name: 'Credit card', amount: totalExpense * 0.37, note: 'Rolling monthly expenses' },
-  ]
+  const accountNotes: Record<string, string> = {
+    'SBI Savings': 'Primary salary and day-to-day banking activity.',
+    'HDFC Savings': 'Freelance income and medium-term cash buffer.',
+    Zerodha: 'Investment and redemption activity for the selected period.',
+    'HDFC Credit Card': 'Card spend across shopping, dining, health, and travel.',
+    'Metro Card': 'Transit and local mobility costs.',
+  }
+
+  const accountCards = accounts.map((accountName) => ({
+    name: accountName,
+    amount: filteredTransactions
+      .filter((transaction) => transaction.account === accountName)
+      .reduce(
+        (total, transaction) => total + (transaction.type === 'income' ? transaction.amount : -transaction.amount),
+        0,
+      ),
+    note: accountNotes[accountName] ?? 'Activity summary for the selected filters.',
+  }))
 
   return (
     <>
@@ -49,7 +59,7 @@ export function AccountsPage() {
       />
 
       <section className="page-grid page-grid--two page-grid--accounts">
-        {accounts.map((account, index) => (
+        {accountCards.map((account, index) => (
           <article key={account.name} className={`panel account-card ${index === 0 ? 'account-card--featured' : ''}`}>
             <span className="eyebrow">Account snapshot</span>
             <h2>{account.name}</h2>
